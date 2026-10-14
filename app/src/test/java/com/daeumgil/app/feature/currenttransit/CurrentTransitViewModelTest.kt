@@ -2,6 +2,8 @@ package com.daeumgil.app.feature.currenttransit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.daeumgil.app.data.transit.SampleTransitSelectionProvider
 import com.daeumgil.app.domain.transit.CurrentTransitContext
 import com.daeumgil.app.domain.transit.CurrentTransitRepository
@@ -35,8 +37,13 @@ class CurrentTransitViewModelTest {
 
     private fun model(repository: FakeRepository, handle: SavedStateHandle = SavedStateHandle()): CurrentTransitViewModel {
         val model = CurrentTransitViewModel(repository, provider, handle) { 9999 }
-        store.put("vm-${number++}", model)
-        return model
+        val factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return model as T
+            }
+        }
+        return ViewModelProvider(store, factory)["vm-${number++}", CurrentTransitViewModel::class.java]
     }
     private fun walk(model: CurrentTransitViewModel) {
         model.selectTransport(TransportType.WALKING)
