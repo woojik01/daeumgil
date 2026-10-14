@@ -41,4 +41,3 @@ fun DaeumgilTheme(mode: ThemeMode, content: @Composable () -> Unit) {
         content = content,
     )
 }
-

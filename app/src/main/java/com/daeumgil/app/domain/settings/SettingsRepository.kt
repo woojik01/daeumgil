@@ -6,4 +6,3 @@ interface SettingsRepository {
     val settings: Flow<AppSettings>
     suspend fun setThemeMode(themeMode: ThemeMode)
 }
-

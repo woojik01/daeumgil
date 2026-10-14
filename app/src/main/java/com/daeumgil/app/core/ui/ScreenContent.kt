@@ -37,4 +37,3 @@ fun EmptyScreen(@StringRes titleRes: Int, @StringRes bodyRes: Int? = null) {
         bodyRes?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 }
-

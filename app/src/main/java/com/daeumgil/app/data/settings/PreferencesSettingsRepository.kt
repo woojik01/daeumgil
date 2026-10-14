@@ -23,4 +23,3 @@ class PreferencesSettingsRepository(private val dataStore: DataStore<Preferences
         private val THEME_MODE = stringPreferencesKey("theme_mode")
     }
 }
-

@@ -11,4 +11,3 @@ class AppContainer(context: Context) {
     val settingsRepository: SettingsRepository =
         PreferencesSettingsRepository(context.applicationContext.settingsDataStore)
 }
-

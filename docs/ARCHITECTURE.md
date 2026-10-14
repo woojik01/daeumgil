@@ -43,4 +43,3 @@ PRD-02에서 현재 상태 모델과 검증 유스케이스, PRD-03에서 장소
 - [Gradle 9.5.0](https://github.com/gradle/gradle/releases/tag/v9.5.0)
 
 Debug 패키지는 `.dev`로 분리합니다. CI에서는 서명 없는 release 배포를 하지 않고 개발 APK만 만듭니다. API 키·서명키·계정·위치 권한은 PRD-01에 필요하지 않습니다.
-

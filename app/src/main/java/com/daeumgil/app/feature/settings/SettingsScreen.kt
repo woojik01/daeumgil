@@ -58,4 +58,3 @@ fun SettingsScreen(state: SettingsUiState, onThemeModeChange: (ThemeMode) -> Uni
         Text(stringResource(R.string.app_version, BuildConfig.VERSION_NAME), style = MaterialTheme.typography.bodySmall)
     }
 }
-

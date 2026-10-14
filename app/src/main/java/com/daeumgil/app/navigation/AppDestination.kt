@@ -13,4 +13,3 @@ enum class AppDestination(val route: String, @param:StringRes val titleRes: Int)
     FAVORITES("favorites", R.string.favorites),
     SETTINGS("settings", R.string.settings),
 }
-

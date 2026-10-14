@@ -21,4 +21,3 @@ class ThemeModeTest {
         assertTrue(ThemeMode.DARK.isDark(false))
     }
 }
-

@@ -16,4 +16,3 @@ enum class ThemeMode(val storageValue: String) {
 }
 
 data class AppSettings(val themeMode: ThemeMode = ThemeMode.SYSTEM)
-
