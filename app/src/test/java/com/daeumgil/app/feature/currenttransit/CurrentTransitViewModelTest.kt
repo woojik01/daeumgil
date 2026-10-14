@@ -138,6 +138,21 @@ class CurrentTransitViewModelTest {
         assertEquals(saved, repository.value.value)
     }
 
+    @Test fun selectionFromDifferentProviderIsNotPresentedAsCurrentAndCanBeReentered() = runTest(dispatcher) {
+        val repository = FakeRepository()
+        repository.value.value = CurrentTransitContext(transportType = TransportType.WALKING,
+            providerId = "retired-provider", stopId = "sample-start", confirmationTime = 42)
+        val model = model(repository)
+        advanceUntilIdle()
+        assertNull(model.state.value.saved)
+        assertEquals(TransitStorageError.INVALID_SAVED_SELECTION, model.state.value.error)
+        model.beginEditing()
+        walk(model)
+        model.save()
+        advanceUntilIdle()
+        assertEquals(provider.id, model.state.value.saved?.providerId)
+    }
+
     private class FakeRepository : CurrentTransitRepository {
         val value = MutableStateFlow<CurrentTransitContext?>(null)
         var failRead = false

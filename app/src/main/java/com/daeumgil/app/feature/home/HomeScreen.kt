@@ -39,6 +39,7 @@ fun HomeScreen(onNavigate: (AppDestination) -> Unit, transitState: CurrentTransi
         val currentLabel = when {
             transitState.isLoading -> stringResource(R.string.transit_loading)
             transitState.error == TransitStorageError.READ -> stringResource(R.string.transit_read_error)
+            transitState.error == TransitStorageError.INVALID_SAVED_SELECTION -> stringResource(R.string.transit_invalid_saved)
             else -> transitSummary(transitState.saved, provider)
         }
         SelectionCard(
