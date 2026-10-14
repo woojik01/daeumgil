@@ -22,10 +22,10 @@ class FoundationUiTest {
 
     @Test fun homeNavigatesToCurrentDestinationAndFavoritesAndBack() {
         awaitSettings()
-        compose.onNodeWithTag("select-current").performClick()
-        compose.onNodeWithText("이동 상태 선택을 준비하고 있어요.").assertIsDisplayed()
+        compose.onNodeWithTag("select-current").performScrollTo().performClick()
+        compose.onNodeWithText("지금 어떻게 이동하고 있나요?").assertIsDisplayed()
         compose.onNodeWithTag("back").performClick()
-        compose.onNodeWithTag("select-destination").performClick()
+        compose.onNodeWithTag("select-destination").performScrollTo().performClick()
         compose.onNodeWithText("목적지 검색을 준비하고 있어요.").assertIsDisplayed()
         compose.onNodeWithTag("back").performClick()
         compose.onNodeWithTag("open-favorites").performScrollTo().performClick()
@@ -55,6 +55,7 @@ class FoundationUiTest {
     private fun awaitSettings() {
         compose.waitUntil(timeoutMillis = 10_000) {
             compose.onAllNodesWithText("설정을 불러오는 중이에요.").fetchSemanticsNodes().isEmpty()
+                && compose.onAllNodesWithText("이동 상태를 불러오는 중이에요.").fetchSemanticsNodes().isEmpty()
         }
     }
 
