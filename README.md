@@ -18,10 +18,10 @@ PRD-01: Compose 홈, 8개 화면의 탐색 구조, 라이트·다크·시스템 
 
 ## 개발 환경과 빌드
 
-- Android Studio: AGP 9.3을 지원하는 버전
+- Android Studio: AGP 9.4을 지원하는 버전
 - JDK 17
 - Android SDK Platform 37.0 / Build Tools 36.0.0
-- Gradle 9.5.0 (동봉한 Wrapper 사용)
+- Gradle 9.8.1 (동봉한 Wrapper 사용)
 - 최소 Android 8.0 (API 26)
 
 프로젝트를 Android Studio에서 열고 SDK 경로를 설정합니다. 로컬 SDK 경로는 `local.properties`에만 저장합니다.

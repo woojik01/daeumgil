@@ -32,14 +32,14 @@ PRD-02에서 현재 상태 모델과 검증 유스케이스, PRD-03에서 장소
 
 2026-10-14 확인. 라이브러리 버전은 버전 카탈로그에 고정합니다. Compose BOM은 공식 사용 예시에 확인된 안정 BOM 2026.09.00을 사용하며 알파·베타를 도입하지 않습니다.
 
-- [AGP 9.3 공식 릴리스·호환성](https://developer.android.com/build/releases/agp-9-3-0-release-notes): 9.3.3, Gradle 9.5.0, JDK 17, 최대 API 37.
+- [AGP 9.4 공식 릴리스·호환성](https://developer.android.com/build/releases/agp-9-4-0-release-notes): 9.4.1을 사용합니다. 빌드 환경은 Gradle 9.8.1 / JDK 17 / SDK 37.0입니다.
 - [Built-in Kotlin](https://developer.android.com/build/migrate-to-built-in-kotlin): 별도 kotlin-android 플러그인을 적용하지 않습니다.
-- [KGP 버전 조정](https://developer.android.com/build/releases/agp-9-0-0-release-notes): Kotlin과 Compose compiler를 2.3.21로 정렬합니다.
+- [KGP 버전 조정](https://developer.android.com/build/releases/agp-9-0-0-release-notes): Kotlin과 Compose compiler를 2.4.21로 정렬합니다.
 - [Compose BOM](https://developer.android.com/develop/ui/compose/bom)
 - [Activity](https://developer.android.com/jetpack/androidx/releases/activity)
 - [Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle)
 - [Navigation](https://developer.android.com/jetpack/androidx/releases/navigation)
 - [DataStore](https://developer.android.com/jetpack/androidx/releases/datastore)
-- [Gradle 9.5.0](https://github.com/gradle/gradle/releases/tag/v9.5.0)
+- [Gradle 9.8.1](https://github.com/gradle/gradle/releases/tag/v9.8.1)
 
 Debug 패키지는 `.dev`로 분리합니다. CI에서는 서명 없는 release 배포를 하지 않고 개발 APK만 만듭니다. API 키·서명키·계정·위치 권한은 PRD-01에 필요하지 않습니다.
