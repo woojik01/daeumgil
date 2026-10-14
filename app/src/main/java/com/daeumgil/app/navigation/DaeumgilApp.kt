@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.daeumgil.app.R
 import com.daeumgil.app.domain.settings.ThemeMode
 import com.daeumgil.app.feature.home.HomeScreen
@@ -37,6 +39,8 @@ import com.daeumgil.app.feature.settings.SettingsError
 import com.daeumgil.app.feature.settings.SettingsScreen
 import com.daeumgil.app.feature.settings.SettingsUiState
 import com.daeumgil.app.core.ui.EmptyScreen
+import com.daeumgil.app.feature.currenttransit.CurrentTransitScreen
+import com.daeumgil.app.feature.currenttransit.CurrentTransitViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,13 +48,18 @@ fun DaeumgilApp(
     settingsState: SettingsUiState,
     onThemeModeChange: (ThemeMode) -> Unit,
     onRetrySettings: () -> Unit,
+    currentTransitViewModel: CurrentTransitViewModel,
     navController: NavHostController = rememberNavController(),
 ) {
+    val transitState = currentTransitViewModel.state.collectAsStateWithLifecycle().value
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = AppDestination.entries.firstOrNull { it.route == backStackEntry?.destination?.route }
         ?: AppDestination.HOME
     val navigate: (AppDestination) -> Unit = { target ->
-        navController.navigate(target.route) { launchSingleTop = true }
+        if (target != AppDestination.CURRENT_SITUATION || (!transitState.isLoading && !transitState.isSaving)) {
+            if (target == AppDestination.CURRENT_SITUATION) currentTransitViewModel.beginEditing()
+            navController.navigate(target.route) { launchSingleTop = true }
+        }
     }
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -59,7 +68,11 @@ fun DaeumgilApp(
                 title = { Text(stringResource(destination.titleRes)) },
                 navigationIcon = {
                     if (destination != AppDestination.HOME) {
-                        TextButton(onClick = { navController.popBackStack() }, modifier = Modifier.testTag("back")) {
+                        TextButton(onClick = {
+                            if (destination == AppDestination.CURRENT_SITUATION) currentTransitViewModel.cancelEditing()
+                            navController.popBackStack()
+                        }, enabled = destination != AppDestination.CURRENT_SITUATION || !transitState.isSaving,
+                            modifier = Modifier.testTag("back")) {
                             Text(stringResource(R.string.go_back))
                         }
                     }
@@ -74,7 +87,7 @@ fun DaeumgilApp(
             )
         },
     ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
+        Column(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
             settingsState.error?.let { error ->
                 Surface(color = MaterialTheme.colorScheme.errorContainer) {
                     Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp)) {
@@ -99,9 +112,10 @@ fun DaeumgilApp(
                     popEnterTransition = { EnterTransition.None },
                     popExitTransition = { ExitTransition.None },
                 ) {
-                    composable(AppDestination.HOME.route) { HomeScreen(navigate) }
+                    composable(AppDestination.HOME.route) { HomeScreen(navigate, transitState, currentTransitViewModel.provider) }
                     composable(AppDestination.CURRENT_SITUATION.route) {
-                        EmptyScreen(R.string.current_preparing, R.string.current_preparing_body)
+                        CurrentTransitScreen(transitState, currentTransitViewModel,
+                            onBack = { navController.popBackStack() }, onSaved = { navController.popBackStack() })
                     }
                     composable(AppDestination.DESTINATION_SEARCH.route) {
                         EmptyScreen(R.string.destination_preparing, R.string.destination_preparing_body)

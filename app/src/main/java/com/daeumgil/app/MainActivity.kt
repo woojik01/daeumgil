@@ -11,16 +11,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.daeumgil.app.core.ui.DaeumgilTheme
 import com.daeumgil.app.feature.settings.SettingsViewModel
+import com.daeumgil.app.feature.currenttransit.CurrentTransitViewModel
 import com.daeumgil.app.navigation.DaeumgilApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val repository = (application as DaeumgilApplication).container.settingsRepository
+        val container = (application as DaeumgilApplication).container
+        val repository = container.settingsRepository
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.factory(repository))
             val state = settingsViewModel.state.collectAsStateWithLifecycle().value
+            val currentTransitViewModel: CurrentTransitViewModel = viewModel(factory =
+                CurrentTransitViewModel.factory(container.currentTransitRepository, container.transitSelectionProvider))
             val isDark = state.settings.themeMode.isDark(isSystemInDarkTheme())
             LaunchedEffect(isDark) {
                 enableEdgeToEdge(
@@ -29,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             DaeumgilTheme(state.settings.themeMode) {
-                DaeumgilApp(state, settingsViewModel::setThemeMode, settingsViewModel::retryRead)
+                DaeumgilApp(state, settingsViewModel::setThemeMode, settingsViewModel::retryRead, currentTransitViewModel)
             }
         }
     }
